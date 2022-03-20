@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import { useQuery } from "react-query";
 import Spinner from '../spinner'
 
-const TemplateMoviePage = ({ movie, children }) => {
+function MovieListPageTemplate({ movies, title, action }) {
 
     const { data , error, isLoading, isError } = useQuery(
       ["images", { id: movie.id }],
@@ -35,7 +35,7 @@ const TemplateMoviePage = ({ movie, children }) => {
             genreFilter={genreFilter}
           />
         </Grid>
-        <MovieList selectFavorite={selectFavorite} movies={displayedMovies}></MovieList>
+        <MovieList action={action} movies={displayedMovies}></MovieList>
       </Grid>
     </Grid>
   );
