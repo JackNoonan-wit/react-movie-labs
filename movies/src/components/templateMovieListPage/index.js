@@ -1,28 +1,28 @@
-import React from "react";  // useState/useEffect redundant 
+import React, { useState } from "react";
 import Header from "../headerMovieList";
 import FilterCard from "../filterMoviesCard";
 import MovieList from "../movieList";
 import Grid from "@mui/material/Grid";
-import { useQuery } from "react-query";
-import Spinner from '../spinner'
 
 function MovieListPageTemplate({ movies, title, action }) {
+  const [nameFilter, setNameFilter] = useState("");
+  const [genreFilter, setGenreFilter] = useState("0");
+  const genreId = Number(genreFilter);
 
-    const { data , error, isLoading, isError } = useQuery(
-      ["images", { id: movie.id }],
-      getMovieImages
-    );
-  
-    if (isLoading) {
-      return <Spinner />;
-    }
-  
-    if (isError) {
-      return <h1>{error.message}</h1>;
-    }
-    const images = data.posters 
-  
-    return (
+  let displayedMovies = movies
+    .filter((m) => {
+      return m.title.toLowerCase().search(nameFilter.toLowerCase()) !== -1;
+    })
+    .filter((m) => {
+      return genreId > 0 ? m.genre_ids.includes(genreId) : true;
+    });
+
+  const handleChange = (type, value) => {
+    if (type === "name") setNameFilter(value);
+    else setGenreFilter(value);
+  };
+
+  return (
     <Grid container sx={{ padding: '20px' }}>
       <Grid item xs={12}>
         <Header title={title} />
@@ -39,6 +39,5 @@ function MovieListPageTemplate({ movies, title, action }) {
       </Grid>
     </Grid>
   );
-};
-
-export default TemplateMoviePage;
+}
+export default MovieListPageTemplate;
